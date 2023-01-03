@@ -1,0 +1,32 @@
+library(dplyr)
+library(forestplot)
+data <- structure(list(mean  = c(NA,1.055,0.764,0.634,0.691,0.409,2.31,0.741,0.290,NA),
+                       lower = c(NA,0.455,0.155,0.281,0.293,0.080,0.63,0.262,0.0890,NA),
+                       upper = c(NA,2.447,3.771,1.428,1.627,2.082,8.48,2.099,0.944,NA)),
+                  .Names = c("mean", "lower", "upper"),
+                  row.names = c(NA, -11L),
+                  class = "data.frame")
+data
+
+
+tabletext <- cbind(c("Hypothermia", "ASA","", "Gender", "Abdomen Approach","","BMI","","",NA),
+                   c("","II","III","Female","Laparoscopic","Robotic","Underweight","Overweight","Obese",NA),
+                   c( "Yes", 116,14,102,76,9,67,43,14,NA),
+                   c( "No", 12,2,14,10,2,3,6,5,NA),
+                   c("OR",1.055,0.764,0.634,0.691,0.409,2.31,0.741,0.290,NA),
+                   c("P-Value",0.536,0.504,0.268,0.396,0.256,0.155,0.572,0.47,""))
+tabletext
+
+data %>%
+  forestplot(labeltext = tabletext,
+             is.summary = c(rep(TRUE, 1), rep(FALSE, 8), TRUE),## Make test bold to highlight summary rows
+             clip = c(0.1, 2.5),## Lower and upper limit of clipping confidence intervals to arrows
+             lty.ci=1,
+             hrzl_lines=list("2"=gpar(lty=1,lwd=2),
+                             "10"=gpar(lwd=2,colums=1:5,col="#000044")),
+             xlog = TRUE,
+             title="Forest Plot for Pre-operative",
+             boxsize=0.2,
+             col = fpColors(box = "red",
+                            line = "darkblue"))
+
